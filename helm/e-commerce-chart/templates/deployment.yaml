@@ -1,0 +1,220 @@
+# e-commerce-chart/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "e-commerce-chart.fullname" . }}-api-gateway
+  labels:
+    app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      component: api-gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        component: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: "{{ .Values.apiGateway.image.repository }}:{{ .Values.apiGateway.image.tag }}"
+          imagePullPolicy: {{ .Values.apiGateway.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 4000
+          # Add environment variables and other configurations as needed for the API Gateway
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: 15
+            periodSeconds: 15
+
+
+
+{{/* Deployment template for auth-service */}}
+{{- if .Values.authService.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "e-commerce-chart.fullname" . }}-auth-service
+  labels:
+    app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    component: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      component: auth-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        component: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: "{{ .Values.authService.image.repository }}:{{ .Values.authService.image.tag }}"
+          imagePullPolicy: {{ .Values.authService.image.pullPolicy }}
+          # Add environment variables and other configurations as needed for auth-service
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 15
+{{- end }}
+
+{{/* Deployment template for product-catalog */}}
+{{- if .Values.productCatalog.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "e-commerce-chart.fullname" . }}-product-catalog
+  labels:
+    app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    component: product-catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      component: product-catalog
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        component: product-catalog
+    spec:
+      containers:
+        - name: product-catalog
+          image: "{{ .Values.productCatalog.image.repository }}:{{ .Values.productCatalog.image.tag }}"
+          imagePullPolicy: {{ .Values.productCatalog.image.pullPolicy }}
+          # Add environment variables and other configurations as needed for product-catalog
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 15
+{{- end }}
+
+{{/* Deployment template for cart */}}
+{{- if .Values.cart.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "e-commerce-chart.fullname" . }}-cart
+  labels:
+    app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    component: cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      component: cart
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        component: cart
+    spec:
+      containers:
+        - name: cart
+          image: "{{ .Values.cart.image.repository }}:{{ .Values.cart.image.tag }}"
+          imagePullPolicy: {{ .Values.cart.image.pullPolicy }}
+         
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 15
+{{- end }}
+
+{{/* Deployment template for order-processing */}}
+{{- if .Values.orderProcessing.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "e-commerce-chart.fullname" . }}-order-processing
+  labels:
+    app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    component: order-processing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      component: order-processing
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "e-commerce-chart.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        component: order-processing
+    spec:
+      containers:
+        - name: order-processing
+          image: "{{ .Values.orderProcessing.image.repository }}"
+          imagePullPolicy: {{ .Values.cart.image.pullPolicy }}
+         
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 15
+{{- end }}

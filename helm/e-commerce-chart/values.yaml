@@ -1,0 +1,70 @@
+# api-gateway-chart/values.yaml
+apiGateway:
+  image:
+    repository: api-gateway
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: LoadBalancer
+    port: 80
+
+authService:
+  image:
+    repository: auth-service
+    tag: latest
+    pullPolicy: IfNotPresent
+  mongodb:
+    enabled: true
+    replicaSet:
+      enabled: true
+      replicas: 3
+    mongodbUri: mongodb://auth-mongodb:27017/auth-db
+    mongodbUsername: admin
+    mongodbPassword: admin
+    mongodbDatabase: product-db
+
+productCatalog:
+  image:
+    repository: product-catlog
+    tag: latest
+    pullPolicy: IfNotPresent
+  mongodb:
+    enabled: true
+    replicaSet:
+      enabled: true
+      replicas: 3
+    mongodbUri: mongodb://product-catlog-mongodb:27017/product-db
+    mongodbUsername: admin
+    mongodbPassword: admin
+    mongodbDatabase: product-db
+
+cart:
+  image:
+    repository: cart-service
+    tag: latest
+    pullPolicy: IfNotPresent
+  mongodb:
+    enabled: true
+    replicaSet:
+      enabled: true
+      replicas: 3
+    mongodbUri: mongodb://cart-mongodb:27017/cart-db
+    mongodbUsername: admin
+    mongodbPassword: admin
+    mongodbDatabase: cart-db
+
+orderProcessing:
+  image:
+    repository: order-processing
+    tag: lates
+    pullPolicy: IfNotPresent
+  mongodb:
+    enabled: true
+    replicaSet:
+      enabled: true
+      replicas: 3
+    mongodbUri: mongodb://order-processing-mongodb:27017/order-db
+    mongodbUsername: admin
+    mongodbPassword: admin
+    mongodbDatabase: order-db
+

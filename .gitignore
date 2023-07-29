@@ -1,0 +1,35 @@
+# OS and Editor temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# Node.js / NPM
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Docker
+.docker/
+.dockerignore
+Dockerfile
+
+# Build artifacts and output directories
+/dist/
+/build/
+/out/
+/public/
+
+# Environment variables file
+.env
+
+# Local Kubernetes files
+/kubernetes/
+
+# Helm chart package files
+/*.tgz
+/charts/
